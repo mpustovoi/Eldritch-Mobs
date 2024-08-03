@@ -89,7 +89,9 @@ public class MobModifierComponent implements ModifierComponent {
                 output.append(tier.substring(0, 1).toUpperCase()).append(tier.substring(1)).append(" ").append(provider.getDisplayName().getString());
                 provider.setCustomName(Text.of(output.toString()));
             } else {
-                for (Ability ability : modifiers) output.append(ability.getName()).append(" ");
+                for (Ability ability : modifiers) {
+                    output.append(ability.getName()).append(" ");
+                }
                 output.append(provider.getDisplayName().getString());
                 provider.setCustomName(Text.of(output.toString()));
             }
@@ -243,7 +245,6 @@ public class MobModifierComponent implements ModifierComponent {
 
     @Override
     public void serverTick() {
-
         if (!checkedIfSpawnedInSoothingLanternChunk) {
             if (this.rank != MobRank.NONE  && !provider.getEntityWorld().isClient) {
                 if(SoothingLanternPersistentState.get((ServerWorld) provider.getEntityWorld()).containsChunk(provider.getChunkPos())) {
@@ -262,7 +263,6 @@ public class MobModifierComponent implements ModifierComponent {
         }
 
         if (getRank() != MobRank.NONE) {
-
             if (!provider.hasCustomName() && !titleSet && !EldritchMobsMod.ELDRITCH_MOBS_CONFIG.turnOffTitles) {
                 setTitle();
                 titleSet = true;

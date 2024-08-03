@@ -105,7 +105,6 @@ public class SummonEliteCommand {
                         entity.setCustomName(null);
                     }
                     EldritchMobsMod.ELDRITCH_MODIFIERS.get(entity).setRank(MobRank.ELITE);
-                    EldritchMobsMod.ELDRITCH_MODIFIERS.get(entity).setTitle();
                 }
 
                 if (!serverWorld.spawnNewEntityAndPassengers(entity)) {
