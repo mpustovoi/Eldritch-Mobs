@@ -105,7 +105,6 @@ public class SummonUltraCommand {
                         entity.setCustomName(null);
                     }
                     EldritchMobsMod.ELDRITCH_MODIFIERS.get(entity).setRank(MobRank.ULTRA);
-                    EldritchMobsMod.ELDRITCH_MODIFIERS.get(entity).randomlySetModifiers();
                     EldritchMobsMod.ELDRITCH_MODIFIERS.get(entity).setTitle();
                 }
 

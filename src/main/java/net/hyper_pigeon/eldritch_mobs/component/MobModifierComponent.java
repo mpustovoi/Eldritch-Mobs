@@ -46,7 +46,6 @@ public class MobModifierComponent implements ModifierComponent {
 
         if (canBeBuffed(provider)) {
             randomlySetRank();
-            randomlySetModifiers();
         } else this.rank = MobRank.NONE;
     }
 
@@ -246,10 +245,14 @@ public class MobModifierComponent implements ModifierComponent {
     public void serverTick() {
 
         if (!checkedIfSpawnedInSoothingLanternChunk) {
-            if (this.rank != MobRank.NONE
-                && !provider.getEntityWorld().isClient
-                && SoothingLanternPersistentState.get((ServerWorld) provider.getEntityWorld()).containsChunk(provider.getChunkPos())
-            ) makeMobNormal();
+            if (this.rank != MobRank.NONE  && !provider.getEntityWorld().isClient) {
+                if(SoothingLanternPersistentState.get((ServerWorld) provider.getEntityWorld()).containsChunk(provider.getChunkPos())) {
+                    makeMobNormal();
+                }
+                else {
+                    randomlySetModifiers();
+                }
+            }
             checkedIfSpawnedInSoothingLanternChunk = true;
         }
 
@@ -280,5 +283,9 @@ public class MobModifierComponent implements ModifierComponent {
             }
             increaseHealth();
         }
+    }
+
+    public boolean isCheckedIfSpawnedInSoothingLanternChunk() {
+        return checkedIfSpawnedInSoothingLanternChunk;
     }
 }

@@ -105,7 +105,6 @@ public class SummonEldritchCommand {
                         entity.setCustomName(null);
                     }
                     EldritchMobsMod.ELDRITCH_MODIFIERS.get(entity).setRank(MobRank.ELDRITCH);
-                    EldritchMobsMod.ELDRITCH_MODIFIERS.get(entity).randomlySetModifiers();
                     EldritchMobsMod.ELDRITCH_MODIFIERS.get(entity).setTitle();
                 }
 
