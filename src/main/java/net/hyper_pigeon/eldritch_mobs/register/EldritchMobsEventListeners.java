@@ -1,11 +1,11 @@
 package net.hyper_pigeon.eldritch_mobs.register;
 
-import dev.onyxstudios.cca.api.v3.component.ComponentProvider;
 import net.hyper_pigeon.eldritch_mobs.EldritchMobsMod;
 import net.hyper_pigeon.eldritch_mobs.ability.Ability;
 import net.hyper_pigeon.eldritch_mobs.ability.callback.*;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.util.ActionResult;
+import org.ladysnake.cca.api.v3.component.ComponentProvider;
 
 import java.util.List;
 

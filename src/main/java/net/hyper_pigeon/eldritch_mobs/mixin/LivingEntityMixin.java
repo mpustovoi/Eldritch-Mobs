@@ -1,30 +1,30 @@
 package net.hyper_pigeon.eldritch_mobs.mixin;
 
-import dev.onyxstudios.cca.api.v3.component.ComponentProvider;
 import net.hyper_pigeon.eldritch_mobs.EldritchMobsMod;
 import net.hyper_pigeon.eldritch_mobs.ability.callback.*;
 import net.hyper_pigeon.eldritch_mobs.rank.MobRank;
 import net.hyper_pigeon.eldritch_mobs.register.EldritchMobsLootTables;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootManager;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.loot.context.LootContextTypes;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.world.World;
+import org.ladysnake.cca.api.v3.component.ComponentProvider;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -41,9 +41,11 @@ public abstract class LivingEntityMixin extends Entity implements ComponentProvi
 
     @Shadow public abstract boolean addStatusEffect(StatusEffectInstance effect);
 
-    @Shadow public abstract boolean hasStatusEffect(StatusEffect effect);
+    @Shadow public abstract boolean hasStatusEffect(RegistryEntry<StatusEffect> effect);
 
     @Shadow public abstract float getHealth();
+
+    @Shadow public abstract RegistryKey<LootTable> getLootTable();
 
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
@@ -138,40 +140,37 @@ public abstract class LivingEntityMixin extends Entity implements ComponentProvi
             MinecraftServer server = this.getEntityWorld().getServer();
 
             if (server != null) {
-                LootManager lootManager = server.getLootManager();
-
                 net.minecraft.loot.context.LootContextParameterSet.Builder builder = new net.minecraft.loot.context.LootContextParameterSet.Builder(
                         (ServerWorld)this.getWorld()
                 )
                         .add(LootContextParameters.THIS_ENTITY, this)
                         .add(LootContextParameters.ORIGIN, this.getPos())
                         .add(LootContextParameters.DAMAGE_SOURCE, source)
-                        .addOptional(LootContextParameters.KILLER_ENTITY, source.getAttacker())
-                        .addOptional(LootContextParameters.DIRECT_KILLER_ENTITY, source.getSource());
+                        .addOptional(LootContextParameters.ATTACKING_ENTITY, source.getAttacker())
+                        .addOptional(LootContextParameters.DIRECT_ATTACKING_ENTITY, source.getSource());
 
                 LootContextParameterSet lootContextParameterSet = builder.build(LootContextTypes.ENTITY);
 
+                LootTable eliteLootTable = this.getWorld().getServer().getReloadableRegistries().getLootTable(RegistryKey.of(RegistryKeys.LOOT_TABLE, EldritchMobsLootTables.ELITE_LOOT_ID));
+                LootTable ultraLootTable = this.getWorld().getServer().getReloadableRegistries().getLootTable(RegistryKey.of(RegistryKeys.LOOT_TABLE, EldritchMobsLootTables.ULTRA_LOOT_ID));
+                LootTable eldritchLootTable = this.getWorld().getServer().getReloadableRegistries().getLootTable(RegistryKey.of(RegistryKeys.LOOT_TABLE, EldritchMobsLootTables.ELDRITCH_LOOT_ID));
+
                 switch (EldritchMobsMod.ELDRITCH_MODIFIERS.get(this).getRank()) {
                     case ELITE -> {
-                        LootTable lootTable = lootManager.getLootTable(EldritchMobsLootTables.ELITE_LOOT_ID);
+                        LootTable lootTable = this.getWorld().getServer().getReloadableRegistries().getLootTable(RegistryKey.of(RegistryKeys.LOOT_TABLE, EldritchMobsLootTables.ELITE_LOOT_ID));
                         lootTable.generateLoot(lootContextParameterSet,this::dropStack);
                     }
                     case ULTRA -> {
-                        LootTable lootTable = lootManager.getLootTable(EldritchMobsLootTables.ULTRA_LOOT_ID);
+                        LootTable lootTable = this.getWorld().getServer().getReloadableRegistries().getLootTable(RegistryKey.of(RegistryKeys.LOOT_TABLE, EldritchMobsLootTables.ULTRA_LOOT_ID));
                         lootTable.generateLoot(lootContextParameterSet,this::dropStack);
                         if (EldritchMobsMod.ELDRITCH_MOBS_CONFIG.combinedLootDrop) {
-                            LootTable eliteLootTable = lootManager.getLootTable(EldritchMobsLootTables.ELITE_LOOT_ID);
                             eliteLootTable.generateLoot(lootContextParameterSet,this::dropStack);
                         }
                     }
                     case ELDRITCH -> {
-                        LootTable lootTable = lootManager.getLootTable(EldritchMobsLootTables.ELDRITCH_LOOT_ID);
-                        lootTable.generateLoot(lootContextParameterSet,this::dropStack);
+                        eldritchLootTable.generateLoot(lootContextParameterSet,this::dropStack);
                         if (EldritchMobsMod.ELDRITCH_MOBS_CONFIG.combinedLootDrop) {
-                            LootTable eliteLootTable = lootManager.getLootTable(EldritchMobsLootTables.ELITE_LOOT_ID);
                             eliteLootTable.generateLoot(lootContextParameterSet,this::dropStack);
-
-                            LootTable ultraLootTable = lootManager.getLootTable(EldritchMobsLootTables.ULTRA_LOOT_ID);
                             ultraLootTable.generateLoot(lootContextParameterSet,this::dropStack);
                         }
                     }

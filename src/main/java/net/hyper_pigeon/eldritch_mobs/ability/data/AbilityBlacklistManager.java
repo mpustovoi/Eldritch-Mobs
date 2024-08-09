@@ -23,7 +23,7 @@ public class AbilityBlacklistManager extends JsonDataLoader implements Identifia
 
     @Override
     public Identifier getFabricId() {
-        return new Identifier("ability_blacklist");
+        return Identifier.of("ability_blacklist");
     }
 
     @Override

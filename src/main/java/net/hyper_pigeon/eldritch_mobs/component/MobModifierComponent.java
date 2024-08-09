@@ -16,6 +16,7 @@ import net.minecraft.entity.boss.ServerBossBar;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
@@ -151,15 +152,15 @@ public class MobModifierComponent implements ModifierComponent {
     private void increaseMaxHealthForModifier(EntityAttributeModifier modifier) {
         EntityAttributeInstance entityAttributeInstance = provider.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
         assert entityAttributeInstance != null;
-        if (!entityAttributeInstance.hasModifier(modifier)) entityAttributeInstance.addPersistentModifier(modifier);
+        if (!entityAttributeInstance.hasModifier(modifier.id())) entityAttributeInstance.addPersistentModifier(modifier);
         provider.setHealth((float) provider.getAttributeValue(EntityAttributes.GENERIC_MAX_HEALTH));
     }
 
     public void increaseHealth() {
         if (!healthIncreased) {
             switch (rank) {
-                case ELITE    -> increaseMaxHealthForModifier(EldritchMobsAttributeModifiers.ELITE_HEALTH_BOOST   );
-                case ULTRA    -> increaseMaxHealthForModifier(EldritchMobsAttributeModifiers.ULTRA_HEALTH_BOOST   );
+                case ELITE    -> increaseMaxHealthForModifier(EldritchMobsAttributeModifiers.ELITE_HEALTH_BOOST);
+                case ULTRA    -> increaseMaxHealthForModifier(EldritchMobsAttributeModifiers.ULTRA_HEALTH_BOOST);
                 case ELDRITCH -> increaseMaxHealthForModifier(EldritchMobsAttributeModifiers.ELDRITCH_HEALTH_BOOST);
                 default -> {}
             }
@@ -171,7 +172,7 @@ public class MobModifierComponent implements ModifierComponent {
     public ServerBossBar getBossBar() { return bossBar; }
 
     @Override
-    public void readFromNbt(NbtCompound tag) {
+    public void readFromNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
 
         healthIncreased = tag.getBoolean("healthIncreased");
         numMaxAbilities = tag.getInt("numMaxAbilities");
@@ -200,7 +201,7 @@ public class MobModifierComponent implements ModifierComponent {
     }
 
     @Override
-    public void writeToNbt(NbtCompound tag) {
+    public void writeToNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         tag.putBoolean("healthIncreased", healthIncreased);
         tag.putInt("numMaxAbilities", numMaxAbilities);
         tag.putBoolean("checkedIfSpawnedInSoothingLanternChunk", checkedIfSpawnedInSoothingLanternChunk);

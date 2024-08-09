@@ -59,7 +59,7 @@ public class GhastlyAbility implements Ability {
                 }
 
                 FireballEntity fireballEntity;
-                fireballEntity = new FireballEntity(mobEntity.getEntityWorld(), mobEntity, f, g, h, ghastlyConfig.fireballPower);
+                fireballEntity = new FireballEntity(mobEntity.getEntityWorld(), mobEntity, new Vec3d(f, g, h), ghastlyConfig.fireballPower);
 
                 fireballEntity.updatePosition(mobEntity.getX() + vec3d.x * 4.0D, mobEntity.getBodyY(0.5D) + 0.5D, fireballEntity.getZ() + vec3d.z * 4.0D);
                 mobEntity.getEntityWorld().spawnEntity(fireballEntity);

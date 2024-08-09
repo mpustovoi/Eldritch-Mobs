@@ -1,17 +1,17 @@
 package net.hyper_pigeon.eldritch_mobs.mixin.client;
 
-import dev.onyxstudios.cca.api.v3.component.ComponentProvider;
+
 import net.hyper_pigeon.eldritch_mobs.EldritchMobsMod;
 import net.hyper_pigeon.eldritch_mobs.extensions.GameRendererExtensions;
 import net.hyper_pigeon.eldritch_mobs.rank.MobRank;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
-import net.minecraft.util.hit.HitResult;
+import org.ladysnake.cca.api.v3.component.ComponentProvider;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -37,8 +37,8 @@ public class GameRendererMixin implements GameRendererExtensions {
 					ordinal = 0
 			)
 	)
-	private void injectUpdateOnGameRenderer(float tickDelta, long limitTime, MatrixStack matrices, CallbackInfo ci) {
-		this.eldritch_mobs$updateTargetedEldritch(tickDelta);
+	private void injectUpdateOnGameRenderer(RenderTickCounter tickCounter, CallbackInfo ci) {
+		this.eldritch_mobs$updateTargetedEldritch(tickCounter.getTickDelta(true));
 	}
 
 	@Override

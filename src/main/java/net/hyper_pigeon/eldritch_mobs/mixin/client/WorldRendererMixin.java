@@ -2,10 +2,7 @@ package net.hyper_pigeon.eldritch_mobs.mixin.client;
 
 import net.hyper_pigeon.eldritch_mobs.extensions.EntityRenderDispatcherExtensions;
 import net.hyper_pigeon.eldritch_mobs.extensions.GameRendererExtensions;
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.render.LightmapTextureManager;
-import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.client.render.*;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.util.math.MatrixStack;
 import org.joml.Matrix4f;
@@ -29,7 +26,7 @@ public class WorldRendererMixin {
                     target = "Lnet/minecraft/client/render/entity/EntityRenderDispatcher;configure(Lnet/minecraft/world/World;Lnet/minecraft/client/render/Camera;Lnet/minecraft/entity/Entity;)V"
             )
     )
-    private void configureDispatcher(MatrixStack matrices, float tickDelta, long limitTime, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f projectionMatrix, CallbackInfo ci) {
+    private void configureDispatcher(RenderTickCounter tickCounter, boolean renderBlockOutline, Camera camera, GameRenderer gameRenderer, LightmapTextureManager lightmapTextureManager, Matrix4f matrix4f, Matrix4f matrix4f2, CallbackInfo ci) {
         ((EntityRenderDispatcherExtensions) this.entityRenderDispatcher).eldritch_mobs$configureTargetedEldritch(((GameRendererExtensions) gameRenderer).eldritch_mobs$getTargetedEldritch());
     }
 }

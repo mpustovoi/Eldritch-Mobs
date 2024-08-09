@@ -23,7 +23,7 @@ public class CustomAbilityManager extends JsonDataLoader implements Identifiable
 
     @Override
     public Identifier getFabricId() {
-        return new Identifier("ability");
+        return Identifier.of("ability");
     }
 
     @Override

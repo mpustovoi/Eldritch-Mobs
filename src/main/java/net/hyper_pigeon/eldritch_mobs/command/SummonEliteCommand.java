@@ -10,6 +10,7 @@ import net.hyper_pigeon.eldritch_mobs.rank.MobRank;
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.command.argument.NbtCompoundArgumentType;
 import net.minecraft.command.argument.RegistryEntryArgumentType;
+import net.minecraft.command.argument.RegistryEntryReferenceArgumentType;
 import net.minecraft.command.argument.Vec3ArgumentType;
 import net.minecraft.command.suggestion.SuggestionProviders;
 import net.minecraft.entity.Entity;
@@ -41,39 +42,21 @@ public class SummonEliteCommand {
                 (LiteralArgumentBuilder)((LiteralArgumentBuilder)CommandManager.literal("summon_elite").requires(source -> source.hasPermissionLevel(2)))
                         .then(
                                 ((RequiredArgumentBuilder)CommandManager.argument(
-                                                "entity", RegistryEntryArgumentType.registryEntry(registryAccess, RegistryKeys.ENTITY_TYPE)
+                                                "entity", RegistryEntryReferenceArgumentType.registryEntry(registryAccess, RegistryKeys.ENTITY_TYPE)
                                         )
                                         .suggests(SuggestionProviders.SUMMONABLE_ENTITIES)
                                         .executes(
-                                                context -> execute(
-                                                        (ServerCommandSource)context.getSource(),
-                                                        RegistryEntryArgumentType.getSummonableEntityType(context, "entity"),
-                                                        ((ServerCommandSource)context.getSource()).getPosition(),
-                                                        new NbtCompound(),
-                                                        true
-                                                )
+                                                context -> execute((ServerCommandSource)context.getSource(), RegistryEntryReferenceArgumentType.getSummonableEntityType(context, "entity"), ((ServerCommandSource)context.getSource()).getPosition(), new NbtCompound(), true)
                                         ))
                                         .then(
                                                 ((RequiredArgumentBuilder)CommandManager.argument("pos", Vec3ArgumentType.vec3())
                                                         .executes(
-                                                                context -> execute(
-                                                                        (ServerCommandSource)context.getSource(),
-                                                                        RegistryEntryArgumentType.getSummonableEntityType(context, "entity"),
-                                                                        Vec3ArgumentType.getVec3(context, "pos"),
-                                                                        new NbtCompound(),
-                                                                        true
-                                                                )
+                                                                context -> execute((ServerCommandSource)context.getSource(), RegistryEntryReferenceArgumentType.getSummonableEntityType(context, "entity"), Vec3ArgumentType.getVec3(context, "pos"), new NbtCompound(), true)
                                                         ))
                                                         .then(
                                                                 CommandManager.argument("nbt", NbtCompoundArgumentType.nbtCompound())
                                                                         .executes(
-                                                                                context -> execute(
-                                                                                        (ServerCommandSource)context.getSource(),
-                                                                                        RegistryEntryArgumentType.getSummonableEntityType(context, "entity"),
-                                                                                        Vec3ArgumentType.getVec3(context, "pos"),
-                                                                                        NbtCompoundArgumentType.getNbtCompound(context, "nbt"),
-                                                                                        false
-                                                                                )
+                                                                                context -> execute((ServerCommandSource)context.getSource(), RegistryEntryReferenceArgumentType.getSummonableEntityType(context, "entity"), Vec3ArgumentType.getVec3(context, "pos"), NbtCompoundArgumentType.getNbtCompound(context, "nbt"), false)
                                                                         )
                                                         )
                                         )
@@ -98,7 +81,7 @@ public class SummonEliteCommand {
             } else {
                 if (initialize && entity instanceof MobEntity) {
                     ((MobEntity)entity)
-                            .initialize(source.getWorld(), source.getWorld().getLocalDifficulty(entity.getBlockPos()), SpawnReason.COMMAND, null, null);
+                            .initialize(source.getWorld(), source.getWorld().getLocalDifficulty(entity.getBlockPos()), SpawnReason.COMMAND, null);
                     if (EldritchMobsMod.ELDRITCH_MODIFIERS.get(entity).getModifiers() != null) {
                         EldritchMobsMod.ELDRITCH_MODIFIERS.get(entity).setRank(MobRank.NONE);
                         EldritchMobsMod.ELDRITCH_MODIFIERS.get(entity).clearModifiers();

@@ -1,8 +1,6 @@
 package net.hyper_pigeon.eldritch_mobs;
 
-import dev.onyxstudios.cca.api.v3.component.ComponentKey;
-import dev.onyxstudios.cca.api.v3.component.ComponentProvider;
-import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
+
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.fabricmc.api.ModInitializer;
@@ -16,6 +14,9 @@ import net.hyper_pigeon.eldritch_mobs.register.EldritchMobsCommands;
 import net.hyper_pigeon.eldritch_mobs.register.EldritchMobsDataRegistry;
 import net.hyper_pigeon.eldritch_mobs.register.EldritchMobsEventListeners;
 import net.minecraft.util.Identifier;
+import org.ladysnake.cca.api.v3.component.ComponentKey;
+import org.ladysnake.cca.api.v3.component.ComponentProvider;
+import org.ladysnake.cca.api.v3.component.ComponentRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +28,7 @@ public class EldritchMobsMod implements ModInitializer {
     public static final String MOD_NAME = "Eldritch Mobs";
     public static final String MOD_ID = "eldritch_mobs";
     public static Identifier id(String path) {
-        return new Identifier(MOD_ID, path);
+        return Identifier.of(MOD_ID, path);
     }
 
     // This logger is used to write text to the console and the log file.

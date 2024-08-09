@@ -8,8 +8,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.particle.SimpleParticleType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
@@ -31,7 +31,7 @@ public class SoothingLanternBlock extends Block implements PolymerHeadBlock {
     @SuppressWarnings("SpellCheckingInspection") public static final String ACTIVE_SKIN
             = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjI0MzcwNjA3NWE0ZjVmMjczMWE4YWQ1ZjYzNjA1OGIxZDViM2E0OWMxZjE0ZjViOWJhYmNmMjA0NGY1OTM1NSJ9fX0=";
 
-    public static final DefaultParticleType[] PARTICLE_TYPES = new DefaultParticleType[] { ParticleTypes.ENCHANT, ParticleTypes.PORTAL, ParticleTypes.EFFECT };
+    public static final SimpleParticleType[] PARTICLE_TYPES = new SimpleParticleType[] { ParticleTypes.ENCHANT, ParticleTypes.PORTAL, ParticleTypes.EFFECT };
 
     public SoothingLanternBlock(final Settings settings) {
         this(settings, false);
@@ -44,9 +44,10 @@ public class SoothingLanternBlock extends Block implements PolymerHeadBlock {
 
     // POLYMER | CLIENT
 
-    @Override public Block getPolymerBlock(final BlockState state) {
-        return getPolymerBlock();
-    }
+//    @Override
+//    public Block getPolymerBlock(final BlockState state) {
+//        return getPolymerBlock();
+//    }
 
     @Override
     public String getPolymerSkinValue(BlockState state, BlockPos pos, ServerPlayerEntity player) {

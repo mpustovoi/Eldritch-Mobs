@@ -31,16 +31,16 @@ public class RustAbility implements Ability {
     public void onAttack(LivingEntity attacker, LivingEntity entity) {
         if (entity.isAlive()) {
             if (entity.hasStackEquipped(EquipmentSlot.HEAD)) {
-                entity.getEquippedStack(EquipmentSlot.HEAD).damage(rustConfig.equipmentDamage, entity, p -> p.sendEquipmentBreakStatus(EquipmentSlot.HEAD));
+                entity.getEquippedStack(EquipmentSlot.HEAD).damage(rustConfig.equipmentDamage, entity, EquipmentSlot.HEAD);
             }
             if (entity.hasStackEquipped(EquipmentSlot.CHEST)) {
-                entity.getEquippedStack(EquipmentSlot.CHEST).damage(rustConfig.equipmentDamage, entity, p -> p.sendEquipmentBreakStatus(EquipmentSlot.CHEST));
+                entity.getEquippedStack(EquipmentSlot.CHEST).damage(rustConfig.equipmentDamage, entity, EquipmentSlot.CHEST);
             }
             if (entity.hasStackEquipped(EquipmentSlot.LEGS)) {
-                entity.getEquippedStack(EquipmentSlot.LEGS).damage(rustConfig.equipmentDamage, entity, p -> p.sendEquipmentBreakStatus(EquipmentSlot.LEGS));
+                entity.getEquippedStack(EquipmentSlot.LEGS).damage(rustConfig.equipmentDamage, entity, EquipmentSlot.LEGS);
             }
             if (entity.hasStackEquipped(EquipmentSlot.FEET)) {
-                entity.getEquippedStack(EquipmentSlot.FEET).damage(rustConfig.equipmentDamage, entity, p -> p.sendEquipmentBreakStatus(EquipmentSlot.FEET));
+                entity.getEquippedStack(EquipmentSlot.FEET).damage(rustConfig.equipmentDamage, entity, EquipmentSlot.FEET);
             }
         }
     }

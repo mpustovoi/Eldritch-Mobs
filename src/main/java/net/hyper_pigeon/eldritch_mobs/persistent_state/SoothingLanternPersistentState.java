@@ -2,6 +2,7 @@ package net.hyper_pigeon.eldritch_mobs.persistent_state;
 
 import net.hyper_pigeon.eldritch_mobs.EldritchMobsMod;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -35,12 +36,12 @@ public class SoothingLanternPersistentState extends PersistentState {
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound tag) {
+    public NbtCompound writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         NbtCompound compoundTag = new NbtCompound();
 
         this.soothingLanternChunks.forEach((key, chunkPos) -> compoundTag.putLong(key, chunkPos.toLong()));
-        tag.put("contents", compoundTag);
-        return tag;
+        nbt.put("contents", compoundTag);
+        return nbt;
     }
 
     public void addChunkPos(ServerWorld world, BlockPos pos) {
@@ -64,7 +65,12 @@ public class SoothingLanternPersistentState extends PersistentState {
     }
 
     public static SoothingLanternPersistentState get(ServerWorld world) {
-        return world.getPersistentStateManager().getOrCreate(SoothingLanternPersistentState::readNbt, SoothingLanternPersistentState::new, "SoothingLanternChunks");
+        var type = new PersistentState.Type<>(
+                () -> new SoothingLanternPersistentState(world.asString()),
+                (nbt, wrapperLookup) -> SoothingLanternPersistentState.readNbt(nbt),
+                null // Object builder API 12.1.0 and later makes this a no-op
+        );
+        return world.getPersistentStateManager().getOrCreate(type, "SoothingLanternChunks");
     }
 
     public void printSoothingLanternChunks() {
